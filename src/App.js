@@ -55,19 +55,6 @@ class App extends Component {
 	};
 
 	calculateFaceLocation = data => {
-		// single face recognition
-		// const clarifaiFace =
-		// 	data.outputs[0].data.regions[0].region_info.bounding_box;
-		// const image = document.getElementById('inputimage');
-		// const width = Number(image.width);
-		// const height = Number(image.height);
-		// return {
-		// 	leftCol: clarifaiFace.left_col * width,
-		// 	topRow: clarifaiFace.top_row * height,
-		// 	rightCol: width - clarifaiFace.right_col * width,
-		// 	bottomRow: height - clarifaiFace.bottom_row * height,
-		// };
-
 		const image = document.getElementById('inputimage');
 		const width = Number(image.width);
 		const height = Number(image.height);
@@ -76,6 +63,7 @@ class App extends Component {
 		// array of all regions containing a face
 		return data.outputs[0].data.regions.map(region => {
 			const faceRegion = region.region_info.bounding_box;
+			// calculate each faceBox from the coordinates in bounding_box
 			const faceBox = {
 				id: region.id,
 				leftCol: faceRegion.left_col * width,
