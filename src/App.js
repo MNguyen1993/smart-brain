@@ -92,6 +92,9 @@ class App extends Component {
 	};
 
 	calculateFaceLocation = data => {
+		if (data === 'Unauthorized') {
+			return;
+		}
 		const image = document.getElementById('inputimage');
 		const width = Number(image.width);
 		const height = Number(image.height);
@@ -113,7 +116,9 @@ class App extends Component {
 	};
 
 	displayFaceBox = boxes => {
-		this.setState({ boxes: boxes });
+		if (boxes) {
+			this.setState({ boxes: boxes });
+		}
 	};
 
 	onInputChange = event => {
@@ -124,7 +129,10 @@ class App extends Component {
 		this.setState({ imageUrl: this.state.input });
 		fetch('http://localhost:3000/imageurl', {
 			method: 'post',
-			headers: { 'Content-Type': 'application/json' },
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: window.sessionStorage.getItem('token'),
+			},
 			body: JSON.stringify({
 				input: this.state.input,
 			}),
@@ -134,7 +142,10 @@ class App extends Component {
 				if (response) {
 					fetch('http://localhost:3000/image', {
 						method: 'put',
-						headers: { 'Content-Type': 'application/json' },
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: window.sessionStorage.getItem('token'),
+						},
 						body: JSON.stringify({
 							id: this.state.user.id,
 						}),
@@ -148,7 +159,6 @@ class App extends Component {
 						.catch(console.log);
 				}
 				this.displayFaceBox(this.calculateFaceLocation(response));
-				console.log(this.state.boxes);
 			})
 			.catch(err => console.log(err));
 	};
